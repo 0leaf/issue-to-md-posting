@@ -1,0 +1,53 @@
+name: 'posting-by-issue'
+description: 'Articles registered as issues can be created as .md files in the intended location.'
+inputs:
+  post_base_path:
+    description: "post_base_path"
+    default: "_post"
+    required: false
+  author:
+    description: "author name"
+    default: "${{ github.actor }}"
+    required: false
+  author_email:
+    description: "author email"
+    default: "${{ github.actor }}@noreply.com"
+    required: false
+
+branding:
+  icon: 'layers'
+  color: 'blue'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set environment variables
+      shell: bash
+      run: echo "FILE_NAME=$(echo ${{ github.event.issue.title }} | tr ' ' -)" >> $GITHUB_ENV
+
+    - name : Make post basepath
+      shell: bash
+      run: mkdir -p '${{ inputs.post_base_path }}'
+
+    - name : Write file and push to repo
+      shell: bash
+      run: echo -e '${{ github.event.issue.body }}' | sed -e "s/\`\`\`/---/g" > "${{ inputs.post_base_path }}"/"${{ env.FILE_NAME }}".md
+              
+    - name : Commit and push
+      shell: bash
+      run: |
+        git config --global user.name "${{ inputs.author }}"
+        git config --global user.email "${{ inputs.author_email }}"
+        git add .; git commit -m "Update ${{ env.FILE_NAME }}.md"
+        git push
+          
+    - name: Add comment
+      uses: peter-evans/create-or-update-comment@a35cf36e5301d70b76f316e867e7788a55a31dae
+      with:
+        issue-number: ${{ github.event.issue.number }}
+        body: |
+          Post has been released! :sparkles:
+            
+    - uses: actions-ecosystem/action-remove-labels@v1
+      with:
+        labels: release
