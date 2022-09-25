@@ -16,7 +16,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Release post
-        uses: 0leaf/issue-to-md-posting@v0.1.1
+        uses: 0leaf/issue-to-md-posting@main
         with:
           post_base_path: '_posts'
        #   author: 'author'

@@ -29,9 +29,21 @@ runs:
       shell: bash
       run: mkdir -p '${{ inputs.post_base_path }}'
 
+    - name: Make run posting shell script
+      shell: bash
+      run: |
+        echo "cat << \"EOF\" | sed -e '1,/\`\`\`/s/\`\`\`/---/'" > run_posting.sh
+        echo "${{ github.event.issue.body }}" >> run_posting.sh
+        echo "EOF" >> run_posting.sh
+
+    - name: Check contents
+      shell: bash
+      run: 
+        sh run_posting.sh
+
     - name : Write file and push to repo
       shell: bash
-      run: echo -e '${{ github.event.issue.body }}' | sed -e "s/\`\`\`/---/g" > "${{ inputs.post_base_path }}"/"${{ env.FILE_NAME }}".md
+      run: sh run_posting.sh > "${{ inputs.post_base_path }}"/"${{ env.FILE_NAME }}".md
               
     - name : Commit and push
       shell: bash
