@@ -21,6 +21,14 @@ branding:
 runs:
   using: "composite"
   steps:
+    - name: test
+      shell: bash
+      run: echo "${{ github.event.issue.body }}"
+
+    - name: Set environment variables
+      shell: bash
+      run: echo "FILE_NAME=$(echo ${{ github.event.issue.title }} | tr ' ' -)" >> $GITHUB_ENV
+
     - name : Make post basepath
       shell: bash
       run: mkdir -p '${{ inputs.post_base_path }}'
@@ -29,12 +37,8 @@ runs:
       shell: bash
       run: |
         echo "cat << \"EOF\" | sed -e '1,/\`\`\`/s/\`\`\`/---/'" > run_posting.sh
-        cat <<< "${{ github.event.issue.body }}" >> run_posting.sh
+        cat "${{ github.event.issue.body }}" >> run_posting.sh
         echo "EOF" >> run_posting.sh
-
-    - name: Set environment variables
-      shell: bash
-      run: echo "FILE_NAME=$(echo ${{ github.event.issue.title }} | tr ' ' -)" >> $GITHUB_ENV
 
     - name: Check contents
       shell: bash
