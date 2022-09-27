@@ -25,13 +25,13 @@ runs:
       shell: bash
       run: echo "${{ github.event.issue.body }}"
 
-    # - name: Set environment variables
-    #   shell: bash
-    #   run: echo "FILE_NAME=$(echo ${{ github.event.issue.title }} | tr ' ' -)" >> $GITHUB_ENV
+    - name: Set environment variables
+      shell: bash
+      run: echo "FILE_NAME=$(echo ${{ github.event.issue.title }} | tr ' ' -)" >> $GITHUB_ENV
 
-    # - name : Make post basepath
-    #   shell: bash
-    #   run: mkdir -p '${{ inputs.post_base_path }}'
+    - name : Make post basepath
+      shell: bash
+      run: mkdir -p '${{ inputs.post_base_path }}'
 
     # - name: Make run posting shell script
     #   shell: bash
@@ -45,25 +45,25 @@ runs:
     #   run: 
     #     sh run_posting.sh
 
-    # - name : Write file and push to repo
-    #   shell: bash
-    #   run: sh run_posting.sh > "${{ inputs.post_base_path }}"/"${{ env.FILE_NAME }}".md
+    - name : Write file and push to repo
+      shell: bash
+      run: echo "${{ github.event.issue.body }}" > "${{ inputs.post_base_path }}"/"${{ env.FILE_NAME }}".md
               
-    # - name : Commit and push
-    #   shell: bash
-    #   run: |
-    #     git config --global user.name "${{ inputs.author }}"
-    #     git config --global user.email "${{ inputs.author_email }}"
-    #     git add .; git commit -m "Update ${{ env.FILE_NAME }}.md"
-    #     git push
+    - name : Commit and push
+      shell: bash
+      run: |
+        git config --global user.name "${{ inputs.author }}"
+        git config --global user.email "${{ inputs.author_email }}"
+        git add .; git commit -m "Update ${{ env.FILE_NAME }}.md"
+        git push
           
-    # - name: Add comment
-    #   uses: peter-evans/create-or-update-comment@a35cf36e5301d70b76f316e867e7788a55a31dae
-    #   with:
-    #     issue-number: ${{ github.event.issue.number }}
-    #     body: |
-    #       Post has been released! :sparkles:
+    - name: Add comment
+      uses: peter-evans/create-or-update-comment@a35cf36e5301d70b76f316e867e7788a55a31dae
+      with:
+        issue-number: ${{ github.event.issue.number }}
+        body: |
+          Post has been released! :sparkles:
             
-    # - uses: actions-ecosystem/action-remove-labels@v1
-    #   with:
-    #     labels: release
+    - uses: actions-ecosystem/action-remove-labels@v1
+      with:
+        labels: release
