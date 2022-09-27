@@ -33,7 +33,7 @@ runs:
       shell: bash
       run: |
         echo "cat << \"EOF\" | sed -e '1,/\`\`\`/s/\`\`\`/---/'" > run_posting.sh
-        echo '${{ github.event.issue.body }}' >> run_posting.sh
+        printf "${{ github.event.issue.body }}" >> run_posting.sh
         echo "EOF" >> run_posting.sh
 
     - name: Check contents
