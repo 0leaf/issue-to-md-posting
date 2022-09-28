@@ -21,9 +21,18 @@ branding:
 runs:
   using: "composite"
   steps:
+
+    - name : file write
+      uses: DamianReeves/write-file-action@master
+      with:
+        path: ${{ env.home}}/.bashrc
+        contents: |
+          "${{ github.event.issue.body }}"
+        write-mode: overwrite
+
     - name: test
       shell: bash
-      run: echo -e "${{ github.event.issue.body }}" > test
+      run: echo "${{ github.event.issue.body }}"
 
     - name: Set environment variables
       shell: bash
