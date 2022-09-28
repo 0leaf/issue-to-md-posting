@@ -22,17 +22,10 @@ runs:
   using: "composite"
   steps:
 
-    - name : file write
-      uses: DamianReeves/write-file-action@master
-      with:
-        path: ${{ env.home}}/.bashrc
-        contents: |
-          "${{ github.event.issue.body }}"
-        write-mode: overwrite
 
-    - name: test
-      shell: bash
-      run: echo "${{ github.event.issue.body }}"
+    # - name: test
+    #   shell: bash
+    #   run: echo "${{ github.event.issue.body }}"
 
     - name: Set environment variables
       shell: bash
@@ -54,9 +47,18 @@ runs:
     #   run: 
     #     sh run_posting.sh
 
-    - name : Write file and push to repo
-      shell: bash
-      run: echo "${{ github.event.issue.body }}" > "${{ inputs.post_base_path }}"/"${{ env.FILE_NAME }}".md
+    - name : file write
+      uses: DamianReeves/write-file-action@master
+      with:
+        path: ${{ inputs.post_base_path }}"/"${{ env.FILE_NAME }}".md
+        contents: |
+          "${{ github.event.issue.body }}"
+        write-mode: overwrite
+
+
+    # - name : Write file and push to repo
+    #   shell: bash
+    #   run: echo "${{ github.event.issue.body }}" > "${{ inputs.post_base_path }}"/"${{ env.FILE_NAME }}".md
               
     - name : Commit and push
       shell: bash
