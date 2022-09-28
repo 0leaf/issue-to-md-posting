@@ -50,9 +50,9 @@ runs:
     - name : file write
       uses: DamianReeves/write-file-action@master
       with:
-        path: ${{ inputs.post_base_path }}"/"${{ env.FILE_NAME }}".md
+        path: ${{ inputs.post_base_path }}/${{ env.FILE_NAME }}.md
         contents: |
-          "${{ github.event.issue.body }}"
+          ${{ github.event.issue.body }}
         write-mode: overwrite
 
 
